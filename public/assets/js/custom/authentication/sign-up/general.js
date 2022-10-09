@@ -31,11 +31,12 @@ var KTSignupGeneral = function() {
 					},
 					'email': {
                         validators: {
+                            regexp: {
+                                regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                message: 'The value is not a valid email address',
+                            },
 							notEmpty: {
 								message: 'Email address is required'
-							},
-                            emailAddress: {
-								message: 'The value is not a valid email address'
 							}
 						}
 					},
@@ -83,8 +84,8 @@ var KTSignupGeneral = function() {
                     }),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
-                        eleInvalidClass: '',
-                        eleValidClass: ''
+                        eleInvalidClass: '',  // comment to enable invalid state icons
+                        eleValidClass: '' // comment to enable valid state icons
                     })
 				}
 			}
@@ -126,6 +127,12 @@ var KTSignupGeneral = function() {
                                 form.reset();  // reset form                    
                                 passwordMeter.reset();  // reset password meter
                                 //form.submit();
+
+                                //form.submit(); // submit form
+                                var redirectUrl = form.getAttribute('data-kt-redirect-url');
+                                if (redirectUrl) {
+                                    location.href = redirectUrl;
+                                }
                             }
                         });
                     }, 1500);   						
@@ -154,7 +161,7 @@ var KTSignupGeneral = function() {
 
     // Password input validation
     var validatePassword = function() {
-        return  (passwordMeter.getScore() === 100);
+        return (passwordMeter.getScore() === 100);
     }
 
     // Public functions

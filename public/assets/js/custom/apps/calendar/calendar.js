@@ -14,8 +14,6 @@ var KTAppCalendar = function () {
         endDate: '',
         allDay: false
     };
-    var popover;
-    var popoverState = false;
 
     // Add event variables
     var eventName;
@@ -74,15 +72,12 @@ var KTAppCalendar = function () {
 
             // Select dates action --- more info: https://fullcalendar.io/docs/select-callback
             select: function (arg) {
-                hidePopovers();
                 formatArgs(arg);
                 handleNewEvent();
             },
 
             // Click event --- more info: https://fullcalendar.io/docs/eventClick
             eventClick: function (arg) {
-                hidePopovers();
-
                 formatArgs({
                     id: arg.event.id,
                     title: arg.event.title,
@@ -92,23 +87,8 @@ var KTAppCalendar = function () {
                     endStr: arg.event.endStr,
                     allDay: arg.event.allDay
                 });
+                
                 handleViewEvent();
-            },
-
-            // MouseEnter event --- more info: https://fullcalendar.io/docs/eventMouseEnter
-            eventMouseEnter: function (arg) {
-                formatArgs({
-                    id: arg.event.id,
-                    title: arg.event.title,
-                    description: arg.event.extendedProps.description,
-                    location: arg.event.extendedProps.location,
-                    startStr: arg.event.startStr,
-                    endStr: arg.event.endStr,
-                    allDay: arg.event.allDay
-                });
-
-                // Show popover preview
-                initPopovers(arg.el);
             },
 
             editable: true,
@@ -249,55 +229,13 @@ var KTAppCalendar = function () {
                 }
             ],
 
-            // Reset popovers when changing calendar views --- more info: https://fullcalendar.io/docs/datesSet
+            // Handle changing calendar views --- more info: https://fullcalendar.io/docs/datesSet
             datesSet: function(){
-                hidePopovers();
+                // do some stuff
             }
         });
 
         calendar.render();
-    }
-
-    // Initialize popovers --- more info: https://getbootstrap.com/docs/4.0/components/popovers/
-    const initPopovers = (element) => {
-        hidePopovers();
-
-        // Generate popover content
-        const startDate = data.allDay ? moment(data.startDate).format('Do MMM, YYYY') : moment(data.startDate).format('Do MMM, YYYY - h:mm a');
-        const endDate = data.allDay ? moment(data.endDate).format('Do MMM, YYYY') : moment(data.endDate).format('Do MMM, YYYY - h:mm a');
-        const popoverHtml = '<div class="fw-bolder mb-2">' + data.eventName + '</div><div class="fs-7"><span class="fw-bold">Start:</span> ' + startDate + '</div><div class="fs-7 mb-4"><span class="fw-bold">End:</span> ' + endDate + '</div><div id="kt_calendar_event_view_button" type="button" class="btn btn-sm btn-light-primary">View More</div>';
-
-        // Popover options
-        var options = {
-            container: 'body',
-            trigger: 'manual',
-            boundary: 'window',
-            placement: 'auto',
-            dismiss: true,
-            html: true,
-            title: 'Event Summary',
-            content: popoverHtml,
-        }
-
-        // Initialize popover
-        popover = KTApp.initBootstrapPopover(element, options);
-
-        // Show popover
-        popover.show();
-
-        // Update popover state
-        popoverState = true;
-
-        // Open view event modal
-        handleViewButton();
-    }
-
-    // Hide active popovers
-    const hidePopovers = () => {
-        if (popoverState) {
-            popover.dispose();
-            popoverState = false;
-        }
     }
 
     // Init validator
@@ -370,8 +308,6 @@ var KTAppCalendar = function () {
     // Handle add button
     const handleAddButton = () => {
         addButton.addEventListener('click', e => {
-            hidePopovers();
-
             // Reset form data
             data = {
                 id: '',

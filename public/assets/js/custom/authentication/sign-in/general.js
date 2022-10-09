@@ -16,11 +16,12 @@ var KTSigninGeneral = function() {
 				fields: {					
 					'email': {
                         validators: {
+                            regexp: {
+                                regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                message: 'The value is not a valid email address',
+                            },
 							notEmpty: {
 								message: 'Email address is required'
-							},
-                            emailAddress: {
-								message: 'The value is not a valid email address'
 							}
 						}
 					},
@@ -35,7 +36,9 @@ var KTSigninGeneral = function() {
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
-                        rowSelector: '.fv-row'
+                        rowSelector: '.fv-row',
+                        eleInvalidClass: '',  // comment to enable invalid state icons
+                        eleValidClass: '' // comment to enable valid state icons
                     })
 				}
 			}
@@ -76,8 +79,13 @@ var KTSigninGeneral = function() {
                         }).then(function (result) {
                             if (result.isConfirmed) { 
                                 form.querySelector('[name="email"]').value= "";
-                                form.querySelector('[name="password"]').value= "";                                
+                                form.querySelector('[name="password"]').value= "";  
+                                                              
                                 //form.submit(); // submit form
+                                var redirectUrl = form.getAttribute('data-kt-redirect-url');
+                                if (redirectUrl) {
+                                    location.href = redirectUrl;
+                                }
                             }
                         });
                     }, 2000);   						

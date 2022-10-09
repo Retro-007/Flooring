@@ -31,8 +31,8 @@ var KTAccountSecuritySummary = function () {
                 bar: {
                     horizontal: false,
                     columnWidth: ['35%'],
-                    endingShape: 'rounded'
-                },
+                    borderRadius: 6
+                }
             },
             legend: {
                 show: false
@@ -55,7 +55,7 @@ var KTAccountSecuritySummary = function () {
                 },
                 labels: {
                     style: {
-                        colors: KTUtil.getCssVariableValue('--bs-gray-400'),
+                        colors: KTUtil.getCssVariableValue('--kt-gray-400'),
                         fontSize: '12px'
                     }
                 }
@@ -63,7 +63,7 @@ var KTAccountSecuritySummary = function () {
             yaxis: {
                 labels: {
                     style: {
-                        colors: KTUtil.getCssVariableValue('--bs-gray-400'),
+                        colors: KTUtil.getCssVariableValue('--kt-gray-400'),
                         fontSize: '12px'
                     }
                 }
@@ -102,9 +102,9 @@ var KTAccountSecuritySummary = function () {
                     }
                 }
             },
-            colors: [KTUtil.getCssVariableValue('--bs-primary'), KTUtil.getCssVariableValue('--bs-gray-200')],
+            colors: [KTUtil.getCssVariableValue('--kt-primary'), KTUtil.getCssVariableValue('--kt-gray-200')],
             grid: {
-                borderColor: KTUtil.getCssVariableValue('--bs-gray-200'),
+                borderColor: KTUtil.getCssVariableValue('--kt-gray-200'),
                 strokeDashArray: 4,
                 yaxis: {
                     lines: {
@@ -120,8 +120,10 @@ var KTAccountSecuritySummary = function () {
         var tab = document.querySelector(tabSelector);
         
         if (initByDefault === true) {
-            chart.render();
-            init = true;
+            setTimeout(function() {
+                chart.render();
+                init = true;
+            }, 500);
         }        
 
         tab.addEventListener('shown.bs.tab', function (event) {
