@@ -16,6 +16,9 @@ License: For each use you must have a valid license purchased only from above li
 <head>
     <base href="{{ asset('/') }}" />
     <title></title>
+    @php
+        $path = asset('/');
+    @endphp
     <meta charset="utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -30,14 +33,19 @@ License: For each use you must have a valid license purchased only from above li
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{$path}}assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{$path}}assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
     <!--end::Vendor Stylesheets-->
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{$path}}assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{$path}}assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link rel="stylesheet" href="{{$path}}assets/jstree/dist/themes/default/style.min.css" />
     <!--end::Global Stylesheets Bundle-->
+    
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -132,7 +140,46 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Content wrapper-->
 						<div class="d-flex flex-column flex-column-fluid">
 							<!--begin::Toolbar-->
-							  @yield('section')
+                            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+								<!--begin::Toolbar container-->
+								<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+									<!--begin::Page title-->
+									<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+										<!--begin::Title-->
+										<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Customer List</h1>
+										<!--end::Title-->
+										<!--begin::Breadcrumb-->
+										<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+											<!--begin::Item-->
+											<li class="breadcrumb-item text-muted">
+												<a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Home</a>
+											</li>
+											<!--end::Item-->
+											<!--begin::Item-->
+											<li class="breadcrumb-item">
+												<span class="bullet bg-gray-400 w-5px h-2px"></span>
+											</li>
+											<!--end::Item-->
+											<!--begin::Item-->
+											<li class="breadcrumb-item text-muted">Customers</li>
+											<!--end::Item-->
+										</ul>
+										<!--end::Breadcrumb-->
+									</div>
+									<!--end::Page title-->
+									<!--begin::Actions-->
+									
+									<!--end::Actions-->
+								</div>
+								<!--end::Toolbar container-->
+							</div>
+                            <div id="kt_app_content" class="app-content flex-column-fluid">
+								<!--begin::Content container-->
+								<div id="kt_app_content_container" class="app-container container-xxl">
+                                    @yield('content')
+								</div>
+								<!--end::Content container-->
+							</div>
 							<!--end::Content-->
 						</div>
 						<!--end::Content wrapper-->
@@ -151,11 +198,11 @@ License: For each use you must have a valid license purchased only from above li
         var hostUrl = window.location.protocol + "//" + window.location.host;
     </script>
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="assets/plugins/global/plugins.bundle.js"></script>
-    <script src="assets/js/scripts.bundle.js"></script>
+    <script src="{{$path}}assets/plugins/global/plugins.bundle.js"></script>
+    <script src="{{$path}}assets/js/scripts.bundle.js"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Vendors Javascript(used for this page only)-->
-    <script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+    <script src="{{$path}}assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
@@ -167,16 +214,18 @@ License: For each use you must have a valid license purchased only from above li
     <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
-    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="{{$path}}assets/plugins/custom/datatables/datatables.bundle.js"></script>
     <!--end::Vendors Javascript-->
     <!--begin::Custom Javascript(used for this page only)-->
-    <script src="assets/js/widgets.bundle.js"></script>
-    <script src="assets/js/custom/widgets.js"></script>
-    <script src="assets/js/custom/apps/chat/chat.js"></script>
-    <script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
-    <script src="assets/js/custom/utilities/modals/create-app.js"></script>
-    <script src="assets/js/custom/utilities/modals/new-target.js"></script>
-    <script src="assets/js/custom/utilities/modals/users-search.js"></script>
+    <script src="{{$path}}assets/js/widgets.bundle.js"></script>
+    <script src="{{$path}}assets/js/custom/widgets.js"></script>
+    <script src="{{$path}}assets/js/custom/apps/chat/chat.js"></script>
+    <script src="{{$path}}assets/js/custom/utilities/modals/upgrade-plan.js"></script>
+    <script src="{{$path}}assets/js/custom/utilities/modals/create-app.js"></script>
+    <script src="{{$path}}assets/js/custom/utilities/modals/new-target.js"></script>
+    <script src="{{$path}}assets/js/custom/utilities/modals/users-search.js"></script>
+    <script src="{{$path}}assets/jstree/dist/jstree.min.js"></script>
+   
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
 </body>
