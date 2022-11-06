@@ -2,44 +2,10 @@
 @section('content')
 <div id="kt_app_content_container" class="app-container container-xxl">
     <!--begin::Form-->
-    <form id="kt_ecommerce_add_product_form" action="{{route('admin.addNewCategory')}}" method="POST" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework" data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/products.html">
+    <form id="kt_ecommerce_add_product_form" action="{{route('admin.updateCategory')}}" method="POST" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework" data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/products.html">
         <!--begin::Aside column-->
         @csrf
-        <input type="hidden" value="0" name="parent_id" />
-        <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10" data-select2-id="select2-data-131-4dry">
-
-            <!--begin::Status-->
-            <div class="card card-flush py-4">
-                <!--begin::Card header-->
-                <div class="card-header">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                        <h2>Status</h2>
-                       
-                    </div>
-                    <!--end::Card title-->
-                    <!--begin::Card toolbar-->
-                    <div class="card-toolbar">
-                        <a  class="btn btn-icon btn-sm btn-primary d-none" id="edit-category"><i class="bi bi-pencil-square"></i></a>
-                    </div>
-                    <!--begin::Card toolbar-->
-                </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card-body pt-0">
-                    <!--begin::Select2-->
-                    <div id="html1">
-
-                    </div>
-                    <!--end::Datepicker-->
-                </div>
-                <!--end::Card body-->
-            </div>
-            <!--end::Status-->
-
-        </div>
-        <!--end::Aside column-->
-        <!--begin::Main column-->
+        <input type="hidden" value="{{$category->id}}" name="id" />
         <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
             <!--begin:::Tabs-->
             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2" role="tablist">
@@ -64,6 +30,9 @@
                                 <div class="card-title">
                                     <h2>General</h2>
                                 </div>
+                                <div class="card-toolbar">
+                                    <button type="button" class="btn btn-icon btn-sm btn-danger" data-id="{{$category->id}}" id="delete-category"><i class="bi bi-trash"></i></button>
+                                </div>
                             </div>
                             <!--end::Card header-->
                             <!--begin::Card body-->
@@ -74,7 +43,7 @@
                                     <label class="required form-label">Product Name</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" name="name" class="form-control mb-2" placeholder="Product name" value="">
+                                    <input type="text" name="name" class="form-control mb-2" placeholder="Product name" value="{{$category->name}}">
                                     <!--end::Input-->
                                     <!--begin::Description-->
                                     <div class="text-muted fs-7">A product name is required and recommended to be unique.</div>
@@ -364,54 +333,47 @@ $path = asset('/');
         theme: 'snow'
     });
 
-    function createJson(data, jsonData) {
-        for (let x of data) {
-            jsonData.push({
-                id: x.id,
-                parent: x.parent ? x.parent?.id : "#",
-                text: x.name
-            })
-            console.log(jsonData, x, )
-            if (x.childrens && x.childrens.length > 0) {
-                createJson(x.childrens, jsonData)
-            }
-        }
-        return
-    }
-    // initDropzone()
-    $(document).ready(() => {
-                $.ajax({
-                    method: 'get',
-                    url: "{{route('admin.getcategory')}}",
-                    success: function(data) {
-                        let jsonData = [{
-                            id: 0,
-                            parent: "#",
-                            text: 'Parent'
-                        }]
-                        createJson(data, jsonData)
-                       
-                        $('#html1').on('changed.jstree', function(e, data) {
-                            var i, j, r = [];
-                           
-                            for (i = 0, j = data.selected.length; i < j; i++) {
-                                r.push(data.instance.get_node(data.selected[i]).id);
-                            }
-                            // $('#event_result').html('Selected: ' + r.join(', '));
-                            $('[name="parent_id"]').val(r[0])
-                            var href = "{{route('admin.editCategory','category_id')}}".replace('category_id',r[0])
-                            $('#edit-category').removeClass('d-none').attr('href',href)
-                        }).jstree({
-                            'core': {
-                                'data': [...jsonData]
-                            }
-                        })
 
+    $('#delete-category').click(function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url:"{{route('admin.deleteCategory')}}",
+                    data:{
+                        id:$(this).attr('data-id')
+                    },
+                    success:function(data){
+                        if(data.success){
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            setTimeout(()=>{
+                                window.location.href="{{route('admin.viewCategory')}}"
+                            },500)
+                        }else {
+                            Swal.fire(
+                                'Deleted is failed !',
+                                'Your file can not deleted.',
+                                'error'
+                            )
+                        }
                     }
                 })
-            })
+            }
+        })
+    })
 
-
-                // listen for event
+    // listen for event
 </script>
 @endsection

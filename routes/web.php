@@ -25,5 +25,8 @@ Route::get('/dashboard', function () {
 Route::get('/view-category',[CategoryController::class,'viewCategory'])->name('admin.viewCategory');
 Route::get('/get-category',[CategoryController::class,'getcategory'])->name('admin.getcategory');
 Route::post('/add-category',[CategoryController::class,'addNewCategory'])->name('admin.addNewCategory');
+Route::get('/edit-category/{id}',[CategoryController::class,'editCategory'])->name('admin.editCategory');
+Route::get('/delete-category',[CategoryController::class,'deleteCategory'])->name('admin.deleteCategory');
+Route::post('/update-category',[CategoryController::class,'updateCategory'])->name('admin.updateCategory');
 
 require __DIR__.'/auth.php';
